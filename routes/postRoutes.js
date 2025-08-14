@@ -1,5 +1,9 @@
 import express from "express";
-import { createPost, listPosts } from "../controllers/postController.js";
+import {
+  createPost,
+  listPosts,
+  getPostById,
+} from "../controllers/postController.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
 import { enforcePostQuota, enforceWordLimit } from "../middlewares/limits.js";
 
@@ -13,5 +17,7 @@ router.post(
   createPost
 );
 router.get("/", listPosts);
+
+router.get(":id", getPostById);
 
 export default router;

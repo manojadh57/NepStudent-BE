@@ -1,7 +1,7 @@
 import express from "express";
 import {
+  getCommentsForPost,
   createComment,
-  getCommentsByPost,
 } from "../controllers/commentController.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
 import {
@@ -11,16 +11,16 @@ import {
 
 const router = express.Router();
 
-// Create comment
+// ✅ Create a new comment (root or reply)
 router.post(
-  "/",
+  "/comments",
   verifyToken,
   enforceCommentQuota,
   enforceWordLimit(200),
   createComment
 );
 
-// ✅ Get all comments for a post
-router.get("/:postId", getCommentsByPost); // No auth needed for read
+// ✅ Get all comments (threaded) for a post
+router.get("/posts/:id/comments", getCommentsForPost);
 
 export default router;

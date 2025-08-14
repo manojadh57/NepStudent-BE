@@ -26,3 +26,15 @@ export const listPosts = async (_req, res) => {
     res.status(500).json({ message: "Failed to load posts" });
   }
 };
+
+// controllers/postController.js
+export const getPostById = async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id);
+    if (!post) return res.status(404).json({ message: "Post not found" });
+    res.json(post);
+  } catch (err) {
+    console.error("Error getting post:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+};
