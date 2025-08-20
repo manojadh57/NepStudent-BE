@@ -1,26 +1,32 @@
 import express from "express";
-import {
-  getCommentsForPost,
-  createComment,
-} from "../controllers/commentController.js";
 import { verifyToken } from "../middlewares/verifyToken.js";
 import {
   enforceCommentQuota,
   enforceWordLimit,
 } from "../middlewares/limits.js";
+import {
+  getCommentsForPost,
+  createComment,
+} from "../controllers/commentController.js";
 
 const router = express.Router();
 
-// ✅ Create a new comment (root or reply)
+/**
+ * GET /api/v1/comments/:postId
+ * List all comments for a post (flat list with parentId so UI can thread)
+ */
+router.get("/:postId", getCommentsForPost);
+
+/**
+ * POST /api/v1/comments
+ * Body: { postId, body, parentCommentId? }
+ */
 router.post(
-  "/comments",
+  "/",
   verifyToken,
   enforceCommentQuota,
-  enforceWordLimit(200),
+  enforceWordLimit(300),
   createComment
 );
-
-// ✅ Get all comments (threaded) for a post
-router.get("/posts/:id/comments", getCommentsForPost);
 
 export default router;
